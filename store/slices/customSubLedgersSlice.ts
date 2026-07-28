@@ -121,7 +121,7 @@ export const getCustomSubLedgersReport = createAsyncThunk(
 
       const response = await reduxApiClient.get(`custom-sub-ledgers/report`, query);
       if (!response.success) {
-        return rejectWithValue(response.error?.message || response.message || "Failed to load report");
+        return rejectWithValue(response.error?.message || "Failed to load report");
       }
       return response.data ?? response;
     } catch (err: any) {

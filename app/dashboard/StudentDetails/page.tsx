@@ -439,10 +439,12 @@ export default function StudentDetailsPage() {
     const payload: Record<string, any> = { ...newRow, IDNo: Number(newRow.IDNo) };
     const result: any = await dispatch(createStudent(payload));
 
-    if (createStudent.rejected.match(result)) {
-      setNewRowError(result.payload || "Failed to save record");
-      return;
-    }
+  if (createStudent.rejected.match(result)) {
+  setNewRowError(
+    typeof result.payload === "string" ? result.payload : "Failed to save record"
+  );
+  return;
+}
     resetNewRow();
   };
 

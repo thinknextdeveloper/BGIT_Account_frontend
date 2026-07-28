@@ -136,11 +136,19 @@ export const getDayBookEntries = createAsyncThunk(
   }
 );
 
+
+
 export const getLedgerWiseSummary = createAsyncThunk(
   "dayBook/getLedgerWiseSummary",
   async (params: GetLedgerWiseArgs, { rejectWithValue }) => {
     try {
-      const response = await reduxApiClient.get(`day-book/ledger-wise-summary`, params);
+      const query: Record<string, string> = {
+        collegeName: params.collegeName,
+        dateFrom: params.dateFrom,
+        dateTo: params.dateTo,
+      };
+
+      const response = await reduxApiClient.get(`day-book/ledger-wise-summary`, query);
       if (!response.success) {
         return rejectWithValue(response.error?.message || "Failed to load ledger-wise summary");
       }
