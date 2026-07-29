@@ -1306,7 +1306,7 @@ export default function AdmissionFeePage() {
                           </td>
                           <td className="border border-gray-300 p-0">
                             <input
-                              value={0}
+                              value={row.credit}
                               onChange={(e) =>
                                 updateFeeRow(i, "credit", e.target.value)
                               }
