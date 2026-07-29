@@ -1243,7 +1243,7 @@ export default function AdmissionFeePage() {
               </div>
 
               <div className="flex items-center gap-3 mb-3">
-                <label className="text-[12px] font-semibold">On Account Ofeeeee</label>
+                <label className="text-[12px] font-semibold">On Account Of</label>
                 <input
                   value={onAccountOf}
                   onChange={(e) => setOnAccountOf(e.target.value)}
@@ -1293,7 +1293,7 @@ export default function AdmissionFeePage() {
                           </td>
                           <td className="border border-gray-300 p-0">
                             <input
-                              value={row.credit}
+                              value={0}
                               onChange={(e) =>
                                 updateFeeRow(i, "credit", e.target.value)
                               }
