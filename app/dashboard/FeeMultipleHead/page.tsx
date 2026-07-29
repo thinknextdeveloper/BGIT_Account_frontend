@@ -1243,7 +1243,7 @@ export default function AdmissionFeePage() {
               </div>
 
               <div className="flex items-center gap-3 mb-3">
-                <label className="text-[12px] font-semibold">On Account Of</label>
+                <label className="text-[12px] font-semibold">On Account Ofeeeee</label>
                 <input
                   value={onAccountOf}
                   onChange={(e) => setOnAccountOf(e.target.value)}
