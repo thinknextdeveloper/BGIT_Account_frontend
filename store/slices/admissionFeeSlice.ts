@@ -176,7 +176,7 @@ export const saveFeeEntry = createAsyncThunk(
 
       if (!response.success) {
         return rejectWithValue(
-          response.error?.message || response.message || "Failed to save fee entry"
+          response.error?.message || "Failed to save fee entry"
         );
       }
 
