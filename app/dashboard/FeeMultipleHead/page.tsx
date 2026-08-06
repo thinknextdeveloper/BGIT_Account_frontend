@@ -107,7 +107,7 @@ interface ReceiptData {
 const PAYMENT_MODES = ["Cash", "Cheque", "Draft", "Other"] as const;
 type PaymentMode = (typeof PAYMENT_MODES)[number];
 
-const SEMESTERS = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
+const SEMESTERS = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eight"];
 
 // Placeholder bank list — in the VB app this came from MasterBank table.
 // Wire this up to a real `banks` slice / endpoint when available.
@@ -524,7 +524,7 @@ export default function AdmissionFeePage() {
   const [idNo, setIdNo] = useState("");
   const [session, setSession] = useState("");
   const [semester, setSemester] = useState("");
-
+console.log("000",semester)
   const [studentTypeTab, setStudentTypeTab] = useState<"New" | "Old">("New");
   const [lateralEntry, setLateralEntry] = useState(false);
 
