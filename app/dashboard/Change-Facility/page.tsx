@@ -37,6 +37,26 @@ function TitleBar({ children }: { children: React.ReactNode }) {
   );
 }
 
+function StudentPhoto({ src }: { src: string | null | undefined }) {
+  if (src) {
+    // eslint-disable-next-line @next/next/no-img-element -- data URL, not a static asset
+    return (
+      <img
+        src={src}
+        alt="Student"
+        className="w-28 h-32 object-cover border border-gray-300 rounded"
+      />
+    );
+  }
+  return (
+    <div className="border border-gray-300 w-28 h-32 flex items-center justify-center bg-gray-50 text-center text-[10px] font-bold text-gray-400 rounded">
+      IMAGE
+      <br />
+      NOT FOUND
+    </div>
+  );
+}
+
 export default function UpdateFacilityPage() {
   const dispatch = useDispatch<AppDispatch>();
   const {
@@ -75,7 +95,10 @@ export default function UpdateFacilityPage() {
       setFacilityType(type as "Hostel" | "Bus" | "None");
       setHostelName(student.HostelName ?? "");
       setRoomType(student.RoomType ?? "");
-      setRoomNo(student.RoomNo ?? "");
+      // RoomNo isn't part of the student record (no such column on
+      // Admissions) — always starts blank and is chosen fresh via the
+      // Room No. dropdown when updating a Hostel facility.
+      setRoomNo("");
       setRoute(student.BusRoute ?? "");
       setStopage(student.Stopage ?? "");
 
@@ -124,6 +147,15 @@ export default function UpdateFacilityPage() {
 
     dispatch(updateFacility({ idNo: student.IDNo, facility }));
   };
+
+  // Mirrors VB txtFacilityAmount: shows HostelCharges when the student is
+  // on Hostel, BusFee when on Bus, blank otherwise.
+  const facilityAmount =
+    student?.Facility === "Hostel"
+      ? student?.HostelCharges
+      : student?.Facility === "Bus"
+      ? student?.BusFee
+      : "";
 
   return (
     <div
@@ -197,26 +229,26 @@ export default function UpdateFacilityPage() {
 
             <div className="flex gap-4">
               <div className="flex-1 space-y-3">
-                <Field label="Session" value={student?.Session} />
+                {/* Session isn't part of the Admissions record in VB — it's
+                    fetched separately via frmdebit.ShowSession(). Wire up
+                    a dedicated session selector/endpoint if this needs to
+                    display a live value. */}
                 <Field label="Name" value={student?.StudentName} />
                 <Field label="Father Name" value={student?.FatherName} />
                 <Field label="Course" value={student?.Course} />
                 <Field label="Batch" value={student?.Batch} />
               </div>
               <div className="w-28 shrink-0">
-                <div className="border border-gray-300 w-28 h-32 flex items-center justify-center bg-gray-50 text-center text-[10px] font-bold text-gray-400 rounded">
-                  IMAGE
-                  <br />
-                  NOT FOUND
-                </div>
+                <StudentPhoto src={student?.Snap} />
               </div>
             </div>
 
             <Field label="Class" value={student?.Class} />
             <Field label="Semester" value="" />
-            <Field label="Scheme" value={student?.Scheme} />
-            <Field label="Category" value={student?.Category} />
-            <Field label="Mode of Admission" value={student?.Quota} />
+            {/* Scheme / Mode of Admission (Quota) removed: VB has both
+                commented out in Display() — those columns don't exist on
+                Admissions in this deployment. */}
+            <Field label="Fee Category" value={student?.FeeCategory} />
 
             <div>
               <label className="text-[12px] font-semibold text-gray-700 block mb-1">
@@ -247,8 +279,7 @@ export default function UpdateFacilityPage() {
               <Field label="Room-Type" value={student?.RoomType} />
               <Field label="Route" value={student?.BusRoute} />
               <Field label="Stopage" value={student?.Stopage} />
-              <Field label="Room No." value={student?.RoomNo} />
-              <Field label="Credit" value="" />
+              <Field label="Facility Amount" value={facilityAmount} />
             </div>
           </div>
 
@@ -371,12 +402,19 @@ export default function UpdateFacilityPage() {
                   <label className="text-[12px] font-semibold text-gray-700 block mb-1">
                     Room No.
                   </label>
-                  <input
+                  <select
                     value={roomNo}
                     onChange={(e) => setRoomNo(e.target.value)}
-                    disabled={facilityType !== "Hostel"}
+                    disabled={facilityType !== "Hostel" || !roomType}
                     className="w-full border border-gray-300 h-8 rounded-sm px-2 bg-white text-[12px] text-gray-800 disabled:bg-gray-100 disabled:text-gray-400"
-                  />
+                  >
+                    <option value="">-- Select --</option>
+                    {roomNumbers.map((r) => (
+                      <option key={r} value={r}>
+                        {r}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>

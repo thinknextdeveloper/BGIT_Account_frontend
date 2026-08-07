@@ -524,7 +524,6 @@ export default function AdmissionFeePage() {
   const [idNo, setIdNo] = useState("");
   const [session, setSession] = useState("");
   const [semester, setSemester] = useState("");
-console.log("000",semester)
   const [studentTypeTab, setStudentTypeTab] = useState<"New" | "Old">("New");
   const [lateralEntry, setLateralEntry] = useState(false);
 

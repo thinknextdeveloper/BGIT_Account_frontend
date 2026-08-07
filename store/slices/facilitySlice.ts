@@ -1,6 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { reduxApiClient } from "@/services/reduxservices";
 
+// Matches the corrected backend query (mirrors VB frmChangeFacility.Display()
+// exactly). Fields removed vs. the old interface, and why:
+//  - RoomNo:  not a column on Admissions — VB never reads it; this was the
+//             cause of the "Invalid column name 'RoomNo'" 500.
+//  - Scheme, Quota: commented out in the VB source (tried and abandoned),
+//             meaning these columns don't exist on Admissions either.
+//  - Category -> FeeCategory: that's the real column name in VB.
+// Fields added:
+//  - BusFee, HostelCharges: VB selects both (used to populate
+//    txtFacilityAmount) but the old Node query dropped them.
+//  - Snap: the student's photo. Backend now sends this as a base64 data
+//    URL string (e.g. "data:image/jpeg;base64,...") rather than a raw
+//    Buffer, so it can be dropped straight into an <img src=>.
+// Session is NOT part of this payload — VB fetches it separately via
+// frmdebit.ShowSession(), not from the Admissions row. TODO: wire up a
+// dedicated session endpoint/selector if the UI needs to display it.
 export interface FacilityStudent {
   IDNo: number;
   StudentType: string;
@@ -10,20 +26,19 @@ export interface FacilityStudent {
   Course: string;
   Batch: number;
   Class: string;
-  Session: string;
   Sex: string;
   LateralEntry: string;
-  Scheme: string;
-  Category: string;
-  Quota: string;
+  FeeCategory: string;
   Facility: string;
   HostelName: string | null;
   RoomType: string | null;
-  RoomNo: string | null;
+  HostelCharges: number | null;
   BusRoute: string | null;
+  BusFee: number | null;
   Stopage: string | null;
   PermanentAddress: string;
   RegistrationNo: string | null;
+  Snap: string | null;
 }
 
 interface FacilityState {
@@ -181,7 +196,6 @@ const facilitySlice = createSlice({
           state.student.Facility = action.payload.type;
           state.student.HostelName = action.payload.hostelName ?? null;
           state.student.RoomType = action.payload.roomType ?? null;
-          state.student.RoomNo = action.payload.roomNo ?? null;
           state.student.BusRoute = action.payload.route ?? null;
           state.student.Stopage = action.payload.stopage ?? null;
         }
