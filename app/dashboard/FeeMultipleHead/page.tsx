@@ -12,6 +12,7 @@ import {
   getAdmissionMetaOptions,
   updateAdmissionMeta,
 } from "@/store/slices/admissionFeeSlice";
+import { getStorage } from "@/utils/storage";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -773,6 +774,7 @@ export default function AdmissionFeePage() {
           chequeDraftNo: paymentMode !== "Cash" ? chequeDraftNo : undefined,
           chequeDraftBank: paymentMode !== "Cash" ? bankName : undefined,
           dateEntry: feeDate,
+          userId: getStorage("userid") || getStorage("user") || "711177",
           feeHeads: headsPayload,
         })
       ).unwrap();
@@ -1299,14 +1301,8 @@ export default function AdmissionFeePage() {
                               className="w-full h-6 text-right px-1 bg-transparent"
                             />
                           </td>
-                          <td className="border border-gray-300 p-0">
-                            <input
-                              value={row.debit}
-                              onChange={(e) =>
-                                updateFeeRow(i, "debit", e.target.value)
-                              }
-                              className="w-full h-6 text-right px-1 bg-transparent"
-                            />
+                          <td className="border border-gray-300 px-2 text-right bg-gray-300 text-gray-700 font-medium">
+                            {fmtNum(row.debit)}
                           </td>
                           <td className="border border-gray-300 px-2 text-right bg-gray-300 text-gray-600">
                             {fmtNum(row.balanceHeadWise)}

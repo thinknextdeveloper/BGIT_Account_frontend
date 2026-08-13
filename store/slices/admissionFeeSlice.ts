@@ -76,6 +76,7 @@ interface SaveFeeArgs {
   chequeDraftNo?: string;
   chequeDraftBank?: string;
   dateEntry?: string;
+  userId?: string;
   feeHeads: { head: string; credit: number }[];
 }
 

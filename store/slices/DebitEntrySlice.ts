@@ -54,6 +54,10 @@ export interface StudentDetail {
   Category?: string | null;
   Quota?: string | null;
   Session?: string | null;
+  FeeCategory?: string | null;
+  Facility?: string | null;
+  HostelCharges?: number | string | null;
+  BusFee?: number | string | null;
 }
 
 export interface MetaOptions {
@@ -64,6 +68,8 @@ export interface MetaOptions {
   categories: string[];
   modesOfAdmission: string[];
   currentSession: string;
+  sessions?: string[];
+  semesters?: string[];
 }
 
 export interface FeeHead {
@@ -97,6 +103,8 @@ const initialState: DebitEntryState = {
     categories: [],
     modesOfAdmission: [],
     currentSession: "",
+    sessions: [],
+    semesters: [],
   },
   metaLoading: false,
 
@@ -116,7 +124,7 @@ const initialState: DebitEntryState = {
 export const fetchMetaOptions = createAsyncThunk(
   "debitEntry/fetchMetaOptions",
   async (
-    params: { collegeName: string; route?: string },
+    params: { collegeName?: string; route?: string } | undefined,
     { rejectWithValue }
   ) => {
     const res = await reduxApiClient.get("debit/meta-options", params as any);
@@ -138,18 +146,34 @@ export const fetchStudentByIdNo = createAsyncThunk(
 export const fetchFeeHeads = createAsyncThunk(
   "debitEntry/fetchFeeHeads",
   async (
-    params: { idNo: string; semester?: string; feeCategory?: string },
+    params: {
+      idNo?: string;
+      collegeName?: string;
+      course?: string;
+      batch?: string;
+      semester?: string;
+      feeCategory?: string;
+      ledgerName?: string;
+    },
     { rejectWithValue }
   ) => {
     const res = await reduxApiClient.get("debit/fee-heads", params as any);
     if (!res.success) return rejectWithValue(res.error?.message);
-    return (res.data?.feeHeads ?? []) as FeeHead[];
+    return {
+      feeHeads: (res.data?.feeHeads ?? []) as FeeHead[],
+      totalCredit: (res.data?.totalCredit ?? 0) as number,
+    };
   }
 );
 
 export interface SaveDebitPayload {
+  debitFrom?: "Individual" | "Course";
+  courseStudentType?: "All" | "New" | "Old";
+  collegeName?: string;
+  course?: string;
+  batch?: string | number;
   studentType: "New" | "Old";
-  idNo: string;
+  idNo?: string;
   studentDetail?: Partial<StudentDetail> & {
     collegeName: string;
     course: string;
@@ -172,9 +196,10 @@ export interface SaveDebitPayload {
   };
   session: string;
   semester?: string;
+  semesterId?: number;
   category?: string;
   modeOfAdmission?: string;
-  ledgerName: "Fee" | "Hostel" | "Bus" | "Others";
+  ledgerName: "Fee" | "Hostel" | "Bus" | "Fine" | "Others";
   othersLedgerName?: string;
   facility?: {
     hostelName?: string;
@@ -189,17 +214,17 @@ export interface SaveDebitPayload {
   debit: string;
   remarks?: string;
   dateEntry?: string;
+  userId?: string;
+  feeHeads?: { head: string; credit?: number | string; debit?: number | string }[];
 }
 
 export const saveDebitEntry = createAsyncThunk(
   "debitEntry/saveDebitEntry",
   async (payload: SaveDebitPayload, { rejectWithValue }) => {
-    const res = await reduxApiClient.post(
-      `debit/${payload.idNo}/save`,
-      payload
-    );
+    const url = payload.idNo ? `debit/${payload.idNo}/save` : `debit/course/save`;
+    const res = await reduxApiClient.post(url, payload);
     if (!res.success) return rejectWithValue(res.error?.message);
-    return res.data as { message: string; receiptNo: number; transactionId: number };
+    return res.data as { message: string; receiptNo?: number; transactionId?: number; count?: number };
   }
 );
 
@@ -264,7 +289,7 @@ const debitEntrySlice = createSlice({
       })
       .addCase(fetchFeeHeads.fulfilled, (state, action: any) => {
         state.feeHeadsLoading = false;
-        state.feeHeads = Array.isArray(action.payload) ? action.payload : [];
+        state.feeHeads = Array.isArray(action.payload?.feeHeads) ? action.payload.feeHeads : [];
       })
       .addCase(fetchFeeHeads.rejected, (state, action: any) => {
         state.feeHeadsLoading = false;

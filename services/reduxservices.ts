@@ -104,20 +104,30 @@ export const reduxApiClient = {
     };
 
     const fullUrl = buildFullUrl(url);
-    let response = await fetch(fullUrl, options);
+    try {
+      let response = await fetch(fullUrl, options);
 
-    if (response.status === 401 && includeToken) {
-      const newToken = await refreshAccessToken();
+      if (response.status === 401 && includeToken) {
+        const newToken = await refreshAccessToken();
 
-      if (newToken) {
-        (options.headers as Record<string, string>).Authorization =
-          `Bearer ${newToken}`;
+        if (newToken) {
+          (options.headers as Record<string, string>).Authorization =
+            `Bearer ${newToken}`;
 
-        response = await fetch(fullUrl, options);
+          response = await fetch(fullUrl, options);
+        }
       }
-    }
 
-    return handleResponse(response);
+      return handleResponse(response);
+    } catch (err: any) {
+      return {
+        success: false,
+        data: null,
+        error: {
+          message: err.message || "Network Error: Unable to connect to server",
+        },
+      };
+    }
   },
 
   get: (url: string, params?: Record<string, string>, includeToken = true) => {
