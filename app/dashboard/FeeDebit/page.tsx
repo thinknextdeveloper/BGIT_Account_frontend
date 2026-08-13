@@ -42,10 +42,16 @@ export default function DebitEntryPage() {
     saveError,
     saveSuccess,
   } = useSelector((state: RootState) => state.debitEntry);
-
+// Mirrors VB's txtSession.Text = frmdebit.ShowSession() — keep Session in sync
+// with the current master session once meta options load for the student's college.
+useEffect(() => {
+  if (metaOptions.currentSession) {
+    setSession(metaOptions.currentSession);
+  }
+}, [metaOptions.currentSession]);
   const [colleges, setColleges] = useState<string[]>([]);
   const [collegeName, setCollegeName] = useState("");
-
+console.log("--------",feeHeads)
   // Debits From
   const [debitFrom, setDebitFrom] = useState<"Individual" | "Course">("Individual");
   const [fromMode, setFromMode] = useState<"registrationNo" | "idNo">("idNo");
