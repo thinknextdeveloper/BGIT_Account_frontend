@@ -88,37 +88,60 @@ export default function MasterAnnualFeePage() {
 
 
   const handleAddRow = () => {
-  dispatch(
-    addEmptyRow({
-      CollegeName: collegeName,
-      Course: course,
-      Batch: Number(batch),
-      Semester: semester,
-      Category: "",
-      ModeOfAdmission: "",
-      Scheme: "",
-      Head: "",
-      Amount: 0,
-      isNew: true,
-    })
-  );
-};
+    if (!collegeName || !course || !batch || !semester) {
+      alert("Please select College Name, Course, Batch, and Semester first.");
+      return;
+    }
+    dispatch(
+      addEmptyRow({
+        CollegeName: collegeName,
+        Course: course,
+        Batch: Number(batch),
+        Semester: semester,
+        Category: "",
+        ModeOfAdmission: "",
+        Scheme: "",
+        Head: "",
+        Amount: 0,
+        isNew: true,
+      })
+    );
+  };
 
+  const handleSave = async () => {
+    if (!collegeName || !course || !batch || !semester) {
+      alert("Please select College Name, Course, Batch, and Semester first.");
+      return;
+    }
 
-const handleSave = async () => {
-  console.log("feeRows before save:", feeRows);
-const newRows = feeRows.filter((row) => row.isNew);
+    const validRows = feeRows
+      .filter((row) => row.Head && row.Head.trim() !== "")
+      .map((row) => ({
+        ...row,
+        CollegeName: row.CollegeName || collegeName,
+        Course: row.Course || course,
+        Batch: Number(row.Batch || batch),
+        Semester: row.Semester || semester,
+        Category: row.Category ?? "",
+        ModeOfAdmission: row.ModeOfAdmission ?? "",
+        Scheme: row.Scheme ?? "",
+        Head: row.Head ? row.Head.trim() : "",
+        Amount: Number(row.Amount || 0),
+      }));
 
-if (newRows.length === 0) {
-  alert("No new records to save.");
-  return;
-}
+    if (validRows.length === 0) {
+      alert("No fee structure rows to save. Please enter at least one row with a Head.");
+      return;
+    }
 
-await dispatch(saveFeeStructure(newRows));
-handleDisplay();
-  // await dispatch(saveFeeStructure(feeRows));
-  // handleDisplay();
-};
+    const result = await dispatch(saveFeeStructure(validRows));
+    if (saveFeeStructure.fulfilled.match(result)) {
+      alert("Fee structure saved successfully!");
+      handleDisplay();
+    } else {
+      alert("Failed to save fee structure: " + (result.payload || "Unknown error"));
+    }
+  };
 
   return (
     <div className="p-4 text-gray-900">
@@ -205,7 +228,7 @@ handleDisplay();
       {/* Grid or empty state */}
       {hasSearched && !loading && feeRows.length === 0 ? (
         <div className="border border-gray-400 rounded py-10 text-center text-gray-500 bg-gray-50">
-          No records found for this selection.
+          No records found for this selection. Click "+ Add Row" below to add fee heads.
         </div>
       ) : (
         <div className="border border-gray-400 overflow-auto">
@@ -232,33 +255,33 @@ handleDisplay();
               ) : (
                 feeRows.map((row, index) => (
                   <tr key={index}>
-                    <td className="border px-2 py-1 text-blue-700 font-medium">{row.Course}</td>
-                    <td className="border px-2 py-1 text-gray-900">{row.Batch}</td>
-                    <td className="border px-2 py-1 text-gray-900">{row.Semester}</td>
+                    <td className="border px-2 py-1 text-blue-700 font-medium">{row.Course || course}</td>
+                    <td className="border px-2 py-1 text-gray-900">{row.Batch || batch}</td>
+                    <td className="border px-2 py-1 text-gray-900">{row.Semester || semester}</td>
                     <td className="border px-2 py-1">
                       <input
-                        value={row.Category}
+                        value={row.Category ?? ""}
                         onChange={(e) => handleRowChange(index, "Category", e.target.value)}
                         className="w-full outline-none bg-transparent text-gray-900"
                       />
                     </td>
                     <td className="border px-2 py-1">
                       <input
-                        value={row.ModeOfAdmission}
+                        value={row.ModeOfAdmission ?? ""}
                         onChange={(e) => handleRowChange(index, "ModeOfAdmission", e.target.value)}
                         className="w-full outline-none bg-transparent text-gray-900"
                       />
                     </td>
                     <td className="border px-2 py-1">
                       <input
-                        value={row.Scheme}
+                        value={row.Scheme ?? ""}
                         onChange={(e) => handleRowChange(index, "Scheme", e.target.value)}
                         className="w-full outline-none bg-transparent text-gray-900"
                       />
                     </td>
                     <td className="border px-2 py-1">
                       <input
-                        value={row.Head}
+                        value={row.Head ?? ""}
                         onChange={(e) => handleRowChange(index, "Head", e.target.value)}
                         className="w-full outline-none bg-transparent text-gray-900"
                       />
@@ -266,7 +289,7 @@ handleDisplay();
                     <td className="border px-2 py-1">
                       <input
                         type="number"
-                        value={row.Amount}
+                        value={row.Amount ?? 0}
                         onChange={(e) =>
                           handleRowChange(index, "Amount", Number(e.target.value))
                         }
@@ -284,7 +307,7 @@ handleDisplay();
       <button
         onClick={handleAddRow}
         disabled={!semester}
-        className="mt-2 text-sm text-blue-700 underline disabled:opacity-50"
+        className="mt-2 text-sm text-blue-700 underline disabled:opacity-50 font-semibold"
       >
         + Add Row
       </button>
