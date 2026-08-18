@@ -17,6 +17,11 @@ import concessionSliceReducer from "./slices/concessionSlice"
 import feeReportReducer from "@/store/slices/Feereportslice";
 import hostelReportReducer from "./slices/HostelReportSlice";
 import debitEntryReducer from "@/store/slices/DebitEntrySlice";
+import ledgerStatusReducer from "./slices/ledgerStatusSlice";
+import routeStopageReducer from "./slices/routeStopageSlice";
+import routeWiseReportReducer from "./slices/routeWiseReportSlice";
+import receiptSearchReducer from "./slices/Receiptsearchslice";
+import searchByAddressReducer from "./slices/Searchbyaddressslice";
 
 
 export const store = configureStore({
@@ -38,7 +43,13 @@ export const store = configureStore({
     concession:concessionSliceReducer,
     feeReport: feeReportReducer,
     hostelReport: hostelReportReducer,
-      debitEntry: debitEntryReducer,
+    debitEntry: debitEntryReducer,
+    ledgerStatus: ledgerStatusReducer,
+    routeStopage: routeStopageReducer,
+    routeWiseReport: routeWiseReportReducer,
+    receiptSearch: receiptSearchReducer,
+    searchByAddress: searchByAddressReducer,
+
 
 
   },

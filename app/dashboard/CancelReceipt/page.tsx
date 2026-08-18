@@ -9,7 +9,7 @@ import {
   getCancelReceiptLedgerNames,
   searchCancelReceipt,
   addToCancelledReceipts,
-  getCancelledReceiptsList,
+  getCancelledReceiptsList, 
   clearCancelStatus,
   clearSearchResults,
   clearLedgerNames,
