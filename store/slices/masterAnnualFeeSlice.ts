@@ -132,7 +132,7 @@ export const fetchMasterAnnualFeeReport = createAsyncThunk(
   "masterAnnualFee/fetchReport",
   async (_, { rejectWithValue }) => {
     const response = await reduxApiClient.get("master-annual-fee/report");
-    if (!response.success) return rejectWithValue(response.error?.message ?? response.message);
+    if (!response.success) return rejectWithValue(response.error?.message ?? "Something went wrong");
     return response.data.data; // { rows, totalRecords }
   }
 );

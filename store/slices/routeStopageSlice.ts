@@ -29,7 +29,7 @@ export const fetchRouteStopageReport = createAsyncThunk(
   "routeStopage/fetchReport",
   async (collegeName: string | undefined, { rejectWithValue }) => {
     const res = await reduxApiClient.get("route-stopage/report", collegeName ? { collegeName } : {});
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );

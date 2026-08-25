@@ -40,7 +40,7 @@ export const fetchCourses = createAsyncThunk(
   "pendingRegistrationFee/fetchCourses",
   async (collegeName: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("pending-registration-fee/courses", { collegeName });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -49,7 +49,7 @@ export const fetchBatches = createAsyncThunk(
   "pendingRegistrationFee/fetchBatches",
   async (collegeName: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("pending-registration-fee/batches", { collegeName });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -61,7 +61,7 @@ export const fetchReport = createAsyncThunk(
       Object.entries(params).filter(([, v]) => v !== undefined && v !== "")
     );
     const res = await reduxApiClient.get("pending-registration-fee/report", cleanParams as any);
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );

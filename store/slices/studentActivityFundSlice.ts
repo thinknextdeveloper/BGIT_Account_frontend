@@ -66,7 +66,7 @@ export const fetchCourses = createAsyncThunk(
   "studentActivityFund/fetchCourses",
   async (collegeName: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("student-activity-fund/courses", { collegeName });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -75,7 +75,7 @@ export const fetchSemesters = createAsyncThunk(
   "studentActivityFund/fetchSemesters",
   async (collegeName: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("student-activity-fund/semesters", { collegeName });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -84,7 +84,7 @@ export const fetchBatches = createAsyncThunk(
   "studentActivityFund/fetchBatches",
   async (collegeName: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("student-activity-fund/batches", { collegeName });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -93,7 +93,7 @@ export const fetchCurrentSession = createAsyncThunk(
   "studentActivityFund/fetchCurrentSession",
   async (_, { rejectWithValue }) => {
     const res = await reduxApiClient.get("student-activity-fund/current-session");
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -110,7 +110,7 @@ export const fetchReport = createAsyncThunk(
       )
     );
     const res = await reduxApiClient.get("student-activity-fund/report", cleanParams as any);
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );

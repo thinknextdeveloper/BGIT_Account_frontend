@@ -34,7 +34,7 @@ export const fetchHostelNames = createAsyncThunk(
   "hostelFacilityReport/fetchHostelNames",
   async (_, { rejectWithValue }) => {
     const res = await reduxApiClient.get("hostel-facility-report/hostel-names");
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -53,7 +53,7 @@ export const fetchReport = createAsyncThunk(
       }).filter(([, v]) => v !== undefined && v !== "")
     );
     const res = await reduxApiClient.get("hostel-facility-report/report", cleanParams as any);
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );

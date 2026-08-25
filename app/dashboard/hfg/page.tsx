@@ -10,7 +10,7 @@ import {
   fetchDuplicateReceipt,
   clearReceipt,
   clearLedgers,
-} from "@/store/slices/receiptSearchSlice";
+} from "@/store/slices/Receiptsearchslice";
 
 export default function SearchPrintReceiptPage() {
   const dispatch = useDispatch<AppDispatch>();

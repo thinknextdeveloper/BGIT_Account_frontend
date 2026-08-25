@@ -35,7 +35,7 @@ export const fetchCourses = createAsyncThunk(
   "allSubLedgersPendingFee/fetchCourses",
   async (collegeName: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("all-sub-ledgers-pending-fee/courses", { collegeName });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -44,7 +44,7 @@ export const fetchBatches = createAsyncThunk(
   "allSubLedgersPendingFee/fetchBatches",
   async (collegeName: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("all-sub-ledgers-pending-fee/batches", { collegeName });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -53,7 +53,7 @@ export const fetchSubHeads = createAsyncThunk(
   "allSubLedgersPendingFee/fetchSubHeads",
   async (collegeName: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("all-sub-ledgers-pending-fee/sub-heads", { collegeName });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -62,7 +62,7 @@ export const fetchDisplay = createAsyncThunk(
   "allSubLedgersPendingFee/fetchDisplay",
   async (params: { collegeName: string; course: string; batch: string }, { rejectWithValue }) => {
     const res = await reduxApiClient.get("all-sub-ledgers-pending-fee/display", cleanParams(params) as any);
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -74,7 +74,7 @@ export const fetchSingleSubHead = createAsyncThunk(
     { rejectWithValue }
   ) => {
     const res = await reduxApiClient.get("all-sub-ledgers-pending-fee/single-subhead", cleanParams(params) as any);
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );

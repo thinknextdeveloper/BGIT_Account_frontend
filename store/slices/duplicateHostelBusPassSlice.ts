@@ -58,7 +58,7 @@ export const fetchStudent = createAsyncThunk(
   "duplicateHostelBusPass/fetchStudent",
   async ({ idNo, panel }: { idNo: string; panel: "student1" | "student2" }, { rejectWithValue }) => {
     const res = await reduxApiClient.get("duplicate-hostel-bus-pass/student", { idNo });
-    if (!res.success) return rejectWithValue({ panel, message: res.error?.message ?? res.message });
+    if (!res.success) return rejectWithValue({ panel, message: res.error?.message ?? "Something went wrong" });
     return { panel, ...res.data.data };
   }
 );
@@ -73,7 +73,7 @@ export const fetchPrint = createAsyncThunk(
       Object.entries(params).filter(([, v]) => v !== undefined && v !== "")
     );
     const res = await reduxApiClient.get("duplicate-hostel-bus-pass/print", cleanParams as any);
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -106,7 +106,7 @@ const duplicateHostelBusPassSlice = createSlice({
         };
       })
       .addCase(fetchStudent.rejected, (state, action: any) => {
-        const panel = action.payload?.panel ?? action.meta.arg.panel;
+        const panel = (action.payload?.panel ?? action.meta.arg.panel) as "student1" | "student2";
         state[panel].loading = false;
         state[panel].error = action.payload?.message ?? "Something went wrong";
       })

@@ -45,7 +45,7 @@ export const fetchRoutes = createAsyncThunk(
   "routeWiseReport/fetchRoutes",
   async (_, { rejectWithValue }) => {
     const res = await reduxApiClient.get("route-wise-report/routes");
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -54,7 +54,7 @@ export const fetchRouteWiseReport = createAsyncThunk(
   "routeWiseReport/fetchReport",
   async (params: { route: string; session?: string }, { rejectWithValue }) => {
     const res = await reduxApiClient.get("route-wise-report/report", params as any);
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );

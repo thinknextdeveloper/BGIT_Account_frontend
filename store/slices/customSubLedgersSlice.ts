@@ -49,7 +49,7 @@ export const fetchColleges = createAsyncThunk(
   "customSubLedgers/fetchColleges",
   async (_, { rejectWithValue }) => {
     const res = await reduxApiClient.get("master-course/colleges");
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -58,7 +58,7 @@ export const fetchCourses = createAsyncThunk(
   "customSubLedgers/fetchCourses",
   async (college: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("custom-sub-ledgers/courses", { college });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -67,7 +67,7 @@ export const fetchBatches = createAsyncThunk(
   "customSubLedgers/fetchBatches",
   async (college: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("custom-sub-ledgers/batches", { college });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -76,7 +76,7 @@ export const fetchSemesters = createAsyncThunk(
   "customSubLedgers/fetchSemesters",
   async (college: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("custom-sub-ledgers/semesters", { college });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -85,7 +85,7 @@ export const fetchSubHeads = createAsyncThunk(
   "customSubLedgers/fetchSubHeads",
   async (college: string, { rejectWithValue }) => {
     const res = await reduxApiClient.get("custom-sub-ledgers/sub-heads", { college });
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -94,7 +94,7 @@ export const fetchSessions = createAsyncThunk(
   "customSubLedgers/fetchSessions",
   async (_, { rejectWithValue }) => {
     const res = await reduxApiClient.get("custom-sub-ledgers/sessions");
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -118,7 +118,7 @@ export const fetchReport = createAsyncThunk(
       ...params,
       subHeads: params.subHeads.join(","),
     } as any);
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );

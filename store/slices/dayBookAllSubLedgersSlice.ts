@@ -35,7 +35,7 @@ export const fetchDisplay = createAsyncThunk(
   "dayBookAllSubLedgers/fetchDisplay",
   async (params: { collegeName: string; dateFrom: string; dateTo: string }, { rejectWithValue }) => {
     const res = await reduxApiClient.get("daybook-all-sub-ledgers/display", cleanParams(params) as any);
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
@@ -44,7 +44,7 @@ export const fetchTotals = createAsyncThunk(
   "dayBookAllSubLedgers/fetchTotals",
   async (params: { collegeName: string; dateFrom: string; dateTo: string }, { rejectWithValue }) => {
     const res = await reduxApiClient.get("daybook-all-sub-ledgers/totals", cleanParams(params) as any);
-    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
 );
