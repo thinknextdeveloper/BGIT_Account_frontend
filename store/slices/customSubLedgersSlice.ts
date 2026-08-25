@@ -1,221 +1,178 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { reduxApiClient } from "@/services/reduxservices";
 
-/* ------------------------------------------------------------------ */
-/*  Types                                                              */
-/* ------------------------------------------------------------------ */
-
-export interface ReportRow {
+export interface SubLedgerReportRow {
   DateEntry: string;
-  ReceiptNo: number | string;
-  IDNo: string | number | null;
+  ReceiptNo: number;
+  IDNo: number;
   ClassRollNo: string | null;
   UniRollNo: string | null;
   StudentName: string;
   FatherName: string;
-  heads: Record<string, number>;
+  amounts: Record<string, number>;
   total: number;
 }
 
-interface GetReportArgs {
-  collegeName: string;
-  dateFrom?: string;
-  dateTo?: string;
-  course?: string;
-  batch?: string | number;
-  semester?: string;
-  session?: string;
-  heads: string[];
+export interface SubLedgerReport {
+  rows: SubLedgerReportRow[];
+  columnTotals: Record<string, number>;
+  grandTotal: number;
+  subHeads: string[];
+  totalRecords: number;
 }
 
 interface CustomSubLedgersState {
   colleges: string[];
-  collegesLoading: boolean;
-  collegesError: string | null;
-
-  heads: string[];
   courses: string[];
-  batches: (string | number)[];
+  batches: string[];
   semesters: string[];
-  optionsLoading: boolean;
-  optionsError: string | null;
-
-  rows: ReportRow[];
-  headers: string[];
-  totalRecords: number;
-  columnTotals: Record<string, number>;
-  grandTotal: number;
+  subHeads: string[];
+  sessions: string[];
+  report: SubLedgerReport | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: CustomSubLedgersState = {
   colleges: [],
-  collegesLoading: false,
-  collegesError: null,
-
-  heads: [],
   courses: [],
   batches: [],
   semesters: [],
-  optionsLoading: false,
-  optionsError: null,
-
-  rows: [],
-  headers: [],
-  totalRecords: 0,
-  columnTotals: {},
-  grandTotal: 0,
+  subHeads: [],
+  sessions: [],
+  report: null,
   loading: false,
   error: null,
 };
 
-/* ------------------------------------------------------------------ */
-/*  Thunks                                                              */
-/* ------------------------------------------------------------------ */
-
-export const getCustomSubLedgersColleges = createAsyncThunk(
-  "customSubLedgers/getColleges",
-  async (_: void, { rejectWithValue }) => {
-    try {
-      const response = await reduxApiClient.get(`custom-sub-ledgers/colleges`);
-      if (!response.success) {
-        return rejectWithValue(response.error?.message || "Failed to load colleges");
-      }
-      return response.data ?? response;
-    } catch (err: any) {
-      return rejectWithValue(err.message || "Something went wrong");
-    }
+export const fetchColleges = createAsyncThunk(
+  "customSubLedgers/fetchColleges",
+  async (_, { rejectWithValue }) => {
+    const res = await reduxApiClient.get("master-course/colleges");
+    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    return res.data.data;
   }
 );
 
-export const getCustomSubLedgersOptions = createAsyncThunk(
-  "customSubLedgers/getOptions",
-  async (collegeName: string, { rejectWithValue }) => {
-    try {
-      const response = await reduxApiClient.get(`custom-sub-ledgers/options`, { collegeName });
-      if (!response.success) {
-        return rejectWithValue(response.error?.message || "Failed to load options");
-      }
-      return response.data ?? response;
-    } catch (err: any) {
-      return rejectWithValue(err.message || "Something went wrong");
-    }
+export const fetchCourses = createAsyncThunk(
+  "customSubLedgers/fetchCourses",
+  async (college: string, { rejectWithValue }) => {
+    const res = await reduxApiClient.get("custom-sub-ledgers/courses", { college });
+    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    return res.data.data;
   }
 );
 
-export const getCustomSubLedgersReport = createAsyncThunk(
-  "customSubLedgers/getReport",
-  async (params: GetReportArgs, { rejectWithValue }) => {
-    try {
-      const query: Record<string, string> = {
-        collegeName: params.collegeName,
-        heads: params.heads.join(","),
-      };
-      if (params.dateFrom) query.dateFrom = params.dateFrom;
-      if (params.dateTo) query.dateTo = params.dateTo;
-      if (params.course) query.course = params.course;
-      if (params.batch !== undefined && params.batch !== "") query.batch = String(params.batch);
-      if (params.semester) query.semester = params.semester;
-      if (params.session) query.session = params.session;
-
-      const response = await reduxApiClient.get(`custom-sub-ledgers/report`, query);
-      if (!response.success) {
-        return rejectWithValue(response.error?.message || "Failed to load report");
-      }
-      return response.data ?? response;
-    } catch (err: any) {
-      return rejectWithValue(err.message || "Something went wrong");
-    }
+export const fetchBatches = createAsyncThunk(
+  "customSubLedgers/fetchBatches",
+  async (college: string, { rejectWithValue }) => {
+    const res = await reduxApiClient.get("custom-sub-ledgers/batches", { college });
+    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    return res.data.data;
   }
 );
 
-/* ------------------------------------------------------------------ */
-/*  Slice                                                               */
-/* ------------------------------------------------------------------ */
+export const fetchSemesters = createAsyncThunk(
+  "customSubLedgers/fetchSemesters",
+  async (college: string, { rejectWithValue }) => {
+    const res = await reduxApiClient.get("custom-sub-ledgers/semesters", { college });
+    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    return res.data.data;
+  }
+);
+
+export const fetchSubHeads = createAsyncThunk(
+  "customSubLedgers/fetchSubHeads",
+  async (college: string, { rejectWithValue }) => {
+    const res = await reduxApiClient.get("custom-sub-ledgers/sub-heads", { college });
+    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    return res.data.data;
+  }
+);
+
+export const fetchSessions = createAsyncThunk(
+  "customSubLedgers/fetchSessions",
+  async (_, { rejectWithValue }) => {
+    const res = await reduxApiClient.get("custom-sub-ledgers/sessions");
+    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    return res.data.data;
+  }
+);
+
+export const fetchReport = createAsyncThunk(
+  "customSubLedgers/fetchReport",
+  async (
+    params: {
+      college: string;
+      course?: string;
+      batch?: string;
+      semester?: string;
+      session?: string;
+      dateFrom?: string;
+      dateTo?: string;
+      subHeads: string[];
+    },
+    { rejectWithValue }
+  ) => {
+    const res = await reduxApiClient.get("custom-sub-ledgers/report", {
+      ...params,
+      subHeads: params.subHeads.join(","),
+    } as any);
+    if (!res.success) return rejectWithValue(res.error?.message ?? res.message);
+    return res.data.data;
+  }
+);
 
 const customSubLedgersSlice = createSlice({
   name: "customSubLedgers",
   initialState,
   reducers: {
     clearReport(state) {
-      state.rows = [];
-      state.headers = [];
-      state.totalRecords = 0;
-      state.columnTotals = {};
-      state.grandTotal = 0;
+      state.report = null;
       state.error = null;
     },
-    clearCollegeOptions(state) {
-      state.heads = [];
+    clearCourseBatchSemester(state) {
       state.courses = [];
       state.batches = [];
       state.semesters = [];
+      state.subHeads = [];
     },
   },
   extraReducers: (builder) => {
     builder
-      // -------- getCustomSubLedgersColleges --------
-      .addCase(getCustomSubLedgersColleges.pending, (state) => {
-        state.collegesLoading = true;
-        state.collegesError = null;
+      .addCase(fetchColleges.fulfilled, (state, action: any) => {
+        state.colleges = action.payload;
       })
-      .addCase(getCustomSubLedgersColleges.fulfilled, (state, action: any) => {
-        state.collegesLoading = false;
-        state.colleges = action.payload?.colleges ?? [];
+      .addCase(fetchCourses.fulfilled, (state, action: any) => {
+        state.courses = action.payload;
       })
-      .addCase(getCustomSubLedgersColleges.rejected, (state, action: any) => {
-        state.collegesLoading = false;
-        state.collegesError = action.payload || "Failed to load colleges";
+      .addCase(fetchBatches.fulfilled, (state, action: any) => {
+        state.batches = action.payload;
       })
-
-      // -------- getCustomSubLedgersOptions --------
-      .addCase(getCustomSubLedgersOptions.pending, (state) => {
-        state.optionsLoading = true;
-        state.optionsError = null;
+      .addCase(fetchSemesters.fulfilled, (state, action: any) => {
+        state.semesters = action.payload;
       })
-      .addCase(getCustomSubLedgersOptions.fulfilled, (state, action: any) => {
-        state.optionsLoading = false;
-        const payload = action.payload ?? {};
-        state.heads = payload.heads ?? [];
-        state.courses = payload.courses ?? [];
-        state.batches = payload.batches ?? [];
-        state.semesters = payload.semesters ?? [];
+      .addCase(fetchSubHeads.fulfilled, (state, action: any) => {
+        state.subHeads = action.payload;
       })
-      .addCase(getCustomSubLedgersOptions.rejected, (state, action: any) => {
-        state.optionsLoading = false;
-        state.optionsError = action.payload || "Failed to load options";
-        state.heads = [];
-        state.courses = [];
-        state.batches = [];
-        state.semesters = [];
+      .addCase(fetchSessions.fulfilled, (state, action: any) => {
+        state.sessions = action.payload;
       })
-
-      // -------- getCustomSubLedgersReport --------
-      .addCase(getCustomSubLedgersReport.pending, (state) => {
+      .addCase(fetchReport.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getCustomSubLedgersReport.fulfilled, (state, action: any) => {
+      .addCase(fetchReport.fulfilled, (state, action: any) => {
         state.loading = false;
-        const payload = action.payload ?? {};
-        state.rows = payload.rows ?? [];
-        state.headers = payload.headers ?? [];
-        state.totalRecords = payload.totalRecords ?? 0;
-        state.columnTotals = payload.columnTotals ?? {};
-        state.grandTotal = payload.grandTotal ?? 0;
+        state.report = action.payload;
       })
-      .addCase(getCustomSubLedgersReport.rejected, (state, action: any) => {
+      .addCase(fetchReport.rejected, (state, action: any) => {
         state.loading = false;
-        state.error = action.payload || "Failed to load report";
-        state.rows = [];
-        state.headers = [];
-        state.totalRecords = 0;
-        state.columnTotals = {};
-        state.grandTotal = 0;
+        state.error = action.payload;
+        state.report = null;
       });
   },
 });
 
-export const { clearReport, clearCollegeOptions } = customSubLedgersSlice.actions;
+export const { clearReport, clearCourseBatchSemester } = customSubLedgersSlice.actions;
 export default customSubLedgersSlice.reducer;

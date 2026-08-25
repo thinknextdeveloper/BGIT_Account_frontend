@@ -14,6 +14,20 @@ export interface FeeRow {
   isNew?: boolean;
 }
 
+// Added for the "all records" report grid (frmMasterAnnualFeeReport) —
+// includes FeeCategory/SrNo which the report query returns but FeeRow doesn't.
+export interface MasterAnnualFeeReportRow {
+  CollegeName: string;
+  Course: string;
+  Batch: number | string;
+  Semester: string;
+  Head: string;
+  Amount: number;
+  Category: string;
+  ModeOfAdmission: string;
+  Scheme: string | null;
+}
+
 interface MasterAnnualFeeState {
   colleges: string[];
   courses: string[];
@@ -23,6 +37,11 @@ interface MasterAnnualFeeState {
   loading: boolean;
   saving: boolean;
   error: string | null;
+  // Added for the report grid
+  reportRows: MasterAnnualFeeReportRow[];
+  reportTotalRecords: number;
+  reportLoading: boolean;
+  reportError: string | null;
 }
 
 const initialState: MasterAnnualFeeState = {
@@ -34,6 +53,11 @@ const initialState: MasterAnnualFeeState = {
   loading: false,
   saving: false,
   error: null,
+  // Added for the report grid
+  reportRows: [],
+  reportTotalRecords: 0,
+  reportLoading: false,
+  reportError: null,
 };
 
 export const fetchColleges = createAsyncThunk(
@@ -103,6 +127,16 @@ export const saveFeeStructure = createAsyncThunk(
   }
 );
 
+// Added: full unfiltered report grid (frmMasterAnnualFeeReport)
+export const fetchMasterAnnualFeeReport = createAsyncThunk(
+  "masterAnnualFee/fetchReport",
+  async (_, { rejectWithValue }) => {
+    const response = await reduxApiClient.get("master-annual-fee/report");
+    if (!response.success) return rejectWithValue(response.error?.message ?? response.message);
+    return response.data.data; // { rows, totalRecords }
+  }
+);
+
 const masterAnnualFeeSlice = createSlice({
   name: "masterAnnualFee",
   initialState,
@@ -134,6 +168,12 @@ const masterAnnualFeeSlice = createSlice({
     clearFeeStructure(state) {
       state.feeRows = [];
       state.error = null;
+    },
+    // Added for the report grid
+    clearMasterAnnualFeeReport(state) {
+      state.reportRows = [];
+      state.reportTotalRecords = 0;
+      state.reportError = null;
     },
   },
   extraReducers: (builder) => {
@@ -171,6 +211,22 @@ const masterAnnualFeeSlice = createSlice({
       .addCase(saveFeeStructure.rejected, (state, action: any) => {
         state.saving = false;
         state.error = action.payload as string;
+      })
+      // Added for the report grid
+      .addCase(fetchMasterAnnualFeeReport.pending, (state) => {
+        state.reportLoading = true;
+        state.reportError = null;
+      })
+      .addCase(fetchMasterAnnualFeeReport.fulfilled, (state, action: any) => {
+        state.reportLoading = false;
+        state.reportRows = action.payload.rows;
+        state.reportTotalRecords = action.payload.totalRecords;
+      })
+      .addCase(fetchMasterAnnualFeeReport.rejected, (state, action: any) => {
+        state.reportLoading = false;
+        state.reportError = action.payload as string;
+        state.reportRows = [];
+        state.reportTotalRecords = 0;
       });
   },
 });
@@ -182,6 +238,7 @@ export const {
   updateFeeRow,
   addEmptyRow,
   clearFeeStructure,
+  clearMasterAnnualFeeReport,
 } = masterAnnualFeeSlice.actions;
 
 export default masterAnnualFeeSlice.reducer;

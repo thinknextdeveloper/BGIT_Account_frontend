@@ -22,7 +22,12 @@ import routeStopageReducer from "./slices/routeStopageSlice";
 import routeWiseReportReducer from "./slices/routeWiseReportSlice";
 import receiptSearchReducer from "./slices/Receiptsearchslice";
 import searchByAddressReducer from "./slices/Searchbyaddressslice";
-
+import studentActivityFundReducer from "./slices/studentActivityFundSlice";
+import pendingRegistrationFeeReducer from "./slices/pendingRegistrationFeeSlice";
+import allSubLedgersPendingFeeReducer from "./slices/allSubLedgersPendingFeeSlice";
+import hostelFacilityReportReducer from "./slices/hostelFacilityReportSlice";
+import duplicateHostelBusPassReducer from "./slices/duplicateHostelBusPassSlice";
+import dayBookAllSubLedgersReducer from "./slices/dayBookAllSubLedgersSlice"; // <-- import
 
 export const store = configureStore({
   reducer: {
@@ -49,6 +54,15 @@ export const store = configureStore({
     routeWiseReport: routeWiseReportReducer,
     receiptSearch: receiptSearchReducer,
     searchByAddress: searchByAddressReducer,
+    studentActivityFund: studentActivityFundReducer,
+    pendingRegistrationFee: pendingRegistrationFeeReducer,
+    allSubLedgersPendingFee: allSubLedgersPendingFeeReducer,
+    hostelFacilityReport: hostelFacilityReportReducer,
+    duplicateHostelBusPass: duplicateHostelBusPassReducer,
+    dayBookAllSubLedgers: dayBookAllSubLedgersReducer, // <-- key must match state.dayBookAllSubLedgers
+
+
+
 
 
 
