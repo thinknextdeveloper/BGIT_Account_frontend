@@ -131,13 +131,13 @@ export default function FeeSubLedgerDetailPage() {
             <label className="w-32 font-semibold text-[13px] text-gray-800">College Name</label>
             <select value={collegeName} onChange={(e) => handleCollegeChange(e.target.value)} className={selectCls}>
               <option value="">-- Select --</option>
-              {colleges.map((c) => <option key={c} value={c}>{c}</option>)}
+              {colleges.map((c,index) => <option key={index} value={c}>{c}</option>)}
             </select>
 
             <label className="w-20 font-semibold text-[13px] text-gray-800">Course</label>
             <select value={course} onChange={(e) => setCourse(e.target.value)} disabled={!collegeName} className={selectCls}>
               <option value="">-- Select --</option>
-              {courses.map((c) => <option key={c} value={c}>{c}</option>)}
+              {courses.map((c,index) => <option key={index} value={c}>{c}</option>)}
             </select>
           </div>
 
@@ -153,7 +153,7 @@ export default function FeeSubLedgerDetailPage() {
               className={selectCls}
             >
               <option value="">-- Select --</option>
-              {subLedgerHeads.map((h) => <option key={h} value={h}>{h}</option>)}
+              {subLedgerHeads.map((h,index) => <option key={index} value={h}>{h}</option>)}
             </select>
           </div>
 
@@ -161,19 +161,19 @@ export default function FeeSubLedgerDetailPage() {
             <label className="w-32 font-semibold text-[13px] text-gray-800">Batch</label>
             <select value={batch} onChange={(e) => setBatch(e.target.value)} disabled={!collegeName} className={selectCls}>
               <option value="">-- Select --</option>
-              {batches.map((b) => <option key={b} value={b}>{b}</option>)}
+              {batches.map((b,index) => <option key={index} value={b}>{b}</option>)}
             </select>
 
             <label className="w-20 font-semibold text-[13px] text-gray-800">Semester</label>
             <select value={semester} onChange={(e) => setSemester(e.target.value)} disabled={!collegeName} className={selectCls}>
               <option value="">-- Select --</option>
-              {semesters.map((s) => <option key={s} value={s}>{s}</option>)}
+              {semesters.map((s,index) => <option key={index} value={s}>{s}</option>)}
             </select>
 
             <label className="w-20 font-semibold text-[13px] text-gray-800">Session</label>
             <select value={session} onChange={(e) => setSession(e.target.value)} className={selectCls}>
               <option value="">-- Select --</option>
-              {sessions.map((s) => <option key={s} value={s}>{s}</option>)}
+              {sessions.map((s,index) => <option key={index} value={s}>{s}</option>)}
             </select>
           </div>
 
@@ -236,8 +236,8 @@ export default function FeeSubLedgerDetailPage() {
                   <th className="text-left py-2 px-2 text-gray-900">Student Name</th>
                   <th className="text-left py-2 px-2 text-gray-900">Father Name</th>
                   <th className="text-left py-2 px-2 text-gray-900">Mode of Payment</th>
-                  {columns.map((h) => (
-                    <th key={h} className="text-right py-2 px-2 text-gray-900">{h}</th>
+                  {columns.map((h,index) => (
+                    <th key={index} className="text-right py-2 px-2 text-gray-900">{h}</th>
                   ))}
                   {columns.length > 0 && <th className="text-right py-2 px-2 text-gray-900">Total</th>}
                 </tr>
@@ -255,8 +255,8 @@ export default function FeeSubLedgerDetailPage() {
                     <td className="py-1.5 px-2 text-blue-700">{row.StudentName}</td>
                     <td className="py-1.5 px-2 text-gray-900">{row.FatherName}</td>
                     <td className="py-1.5 px-2 text-gray-900">{row.ModeOfPayment ?? ""}</td>
-                    {columns.map((h) => (
-                      <td key={h} className="py-1.5 px-2 text-right text-gray-900">{row.heads[h] || 0}</td>
+                    {columns.map((h,index) => (
+                      <td key={index} className="py-1.5 px-2 text-right text-gray-900">{row.heads[h] || 0}</td>
                     ))}
                     {columns.length > 0 && (
                       <td className="py-1.5 px-2 text-right font-semibold text-gray-900">{row.Total}</td>
@@ -267,8 +267,8 @@ export default function FeeSubLedgerDetailPage() {
                   <tr className="border-t-2 border-gray-800 font-bold bg-gray-50">
                     <td colSpan={7} />
                     <td className="py-1.5 px-2">Total</td>
-                    {columns.map((h) => (
-                      <td key={h} className="py-1.5 px-2 text-right">{totalsRow.heads[h] || 0}</td>
+                    {columns.map((h,index) => (
+                      <td key={index} className="py-1.5 px-2 text-right">{totalsRow.heads[h] || 0}</td>
                     ))}
                     <td className="py-1.5 px-2 text-right">{totalsRow.Total}</td>
                   </tr>
