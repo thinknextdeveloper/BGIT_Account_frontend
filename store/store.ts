@@ -30,7 +30,8 @@ import duplicateHostelBusPassReducer from "./slices/duplicateHostelBusPassSlice"
 import dayBookAllSubLedgersReducer from "./slices/dayBookAllSubLedgersSlice"; // <-- import
 import refundReportReducer from "./slices/refundReportSlice";
 import feeSubLedgerReducer from "./slices/feeSubLedgerSlice";
-import allRecordsReducer from "./slices/allRecordsSlice";
+import allRecordReducer from "./slices/allRecordSlice";
+import admissionReducer from "./slices/studentAdmission";
 
 export const store = configureStore({
   reducer: {
@@ -65,7 +66,8 @@ export const store = configureStore({
     dayBookAllSubLedgers: dayBookAllSubLedgersReducer, // <-- key must match state.dayBookAllSubLedgers
     refundReport: refundReportReducer,
     feeSubLedger: feeSubLedgerReducer,
-    allRecords: allRecordsReducer,
+    allRecord: allRecordReducer,
+    admission: admissionReducer,
 
 
 
