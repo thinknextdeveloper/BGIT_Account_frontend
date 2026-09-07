@@ -32,6 +32,9 @@ import refundReportReducer from "./slices/refundReportSlice";
 import feeSubLedgerReducer from "./slices/feeSubLedgerSlice";
 import allRecordReducer from "./slices/allRecordSlice";
 import admissionReducer from "./slices/studentAdmission";
+import employeeReducer from  "./slices/Employeeslice"
+import idCardReducer from "./slices/idCardSlice";
+import hostelBusPassReducer from "./slices/hostelBusPassSlice";
 
 export const store = configureStore({
   reducer: {
@@ -68,10 +71,9 @@ export const store = configureStore({
     feeSubLedger: feeSubLedgerReducer,
     allRecord: allRecordReducer,
     admission: admissionReducer,
-
-
-
-
+    employee:employeeReducer,
+    idCard: idCardReducer,
+    hostelBusPass: hostelBusPassReducer,
 
   },
 });
