@@ -85,7 +85,7 @@ export const reduxApiClient = {
 
     const headers: Record<string, string> = {};
 
-    if (includeToken && token) {
+    if (includeToken && token) { ``
       headers.Authorization = `Bearer ${token}`;
     }
 

@@ -22,11 +22,6 @@ import routeStopageReducer from "./slices/routeStopageSlice";
 import routeWiseReportReducer from "./slices/routeWiseReportSlice";
 import receiptSearchReducer from "./slices/Receiptsearchslice";
 import searchByAddressReducer from "./slices/Searchbyaddressslice";
-import searchStopageReducer from "./slices/searchStopageSlice";
-import searchFacultyNameReducer from "./slices/searchFacultyNameSlice";
-import searchFacultyIdNoReducer from "./slices/searchFacultyIdNoSlice";
-import searchReceiptNoReducer from "./slices/searchReceiptNoSlice";
-import searchTransactionIdReducer from "./slices/searchTransactionIdSlice";
 import studentActivityFundReducer from "./slices/studentActivityFundSlice";
 import pendingRegistrationFeeReducer from "./slices/pendingRegistrationFeeSlice";
 import allSubLedgersPendingFeeReducer from "./slices/allSubLedgersPendingFeeSlice";
@@ -37,11 +32,17 @@ import refundReportReducer from "./slices/refundReportSlice";
 import feeSubLedgerReducer from "./slices/feeSubLedgerSlice";
 import allRecordReducer from "./slices/allRecordSlice";
 import admissionReducer from "./slices/studentAdmission";
-import searchNameReducer from "./slices/searchNameSlice";
-import searchUniRollNoReducer from "./slices/searchUniRollNoSlice";
-import searchByClassRollNoReducer from "./slices/searchByClassRollNoSlice";
-import searchByIdNoReducer from "./slices/searchByIdNoSlice";
-
+import employeeReducer from  "./slices/Employeeslice"
+import idCardReducer from "./slices/idCardSlice";
+import hostelBusPassReducer from "./slices/hostelBusPassSlice";
+import ledgerwiseStatusReducer from "./slices/ledgerwiseStatusSlice";
+import allDebitRecordReducer from "./slices/Alldebitrecordslice";
+import assignRightsReducer from "./slices/assignRightsSlice";
+import userManagementReducer from "./slices/userManagementSlice";
+import changePasswordReducer from "./slices/changePasswordSlice";
+import hostelChargesReducer from "./slices/Hostelchargesslice";
+import masterHeadsReducer from "./slices/masterHeadsSlice";
+import reservedReceiptsReducer from "./slices/reservedReceiptsSlice"
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -67,11 +68,6 @@ export const store = configureStore({
     routeWiseReport: routeWiseReportReducer,
     receiptSearch: receiptSearchReducer,
     searchByAddress: searchByAddressReducer,
-    searchStopage: searchStopageReducer,
-    searchFacultyName: searchFacultyNameReducer,
-    searchFacultyIdNo: searchFacultyIdNoReducer,
-    searchReceiptNo: searchReceiptNoReducer,
-    searchTransactionId: searchTransactionIdReducer,
     studentActivityFund: studentActivityFundReducer,
     pendingRegistrationFee: pendingRegistrationFeeReducer,
     allSubLedgersPendingFee: allSubLedgersPendingFeeReducer,
@@ -82,15 +78,17 @@ export const store = configureStore({
     feeSubLedger: feeSubLedgerReducer,
     allRecord: allRecordReducer,
     admission: admissionReducer,
-    searchName: searchNameReducer,
-    searchUniRollNo: searchUniRollNoReducer,
-    searchByClassRollNo: searchByClassRollNoReducer,
-    searchByIdNo: searchByIdNoReducer,
-
-
-
-
-
+    employee:employeeReducer,
+    idCard: idCardReducer,
+    hostelBusPass: hostelBusPassReducer,
+ledgerwiseStatus: ledgerwiseStatusReducer,
+    allDebitRecord: allDebitRecordReducer,
+    assignRights: assignRightsReducer,
+    userManagement: userManagementReducer,
+changePassword: changePasswordReducer,
+hostelCharges: hostelChargesReducer,
+ masterHeads: masterHeadsReducer,
+ reservedReceipts: reservedReceiptsReducer
   },
 });
 

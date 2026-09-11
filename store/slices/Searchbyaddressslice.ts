@@ -42,14 +42,7 @@ export const searchByAddress = createAsyncThunk(
     params: { address: string; college?: string; allColleges: boolean },
     { rejectWithValue }
   ) => {
-    const queryParams: Record<string, string> = {
-      address: params.address,
-      allColleges: String(params.allColleges),
-    };
-    if (!params.allColleges && params.college) {
-      queryParams.college = params.college;
-    }
-    const res = await reduxApiClient.get("search-by-address/students", queryParams);
+    const res = await reduxApiClient.get("search-by-address/students", params as any);
     if (!res.success) return rejectWithValue(res.error?.message ?? "Something went wrong");
     return res.data.data;
   }
