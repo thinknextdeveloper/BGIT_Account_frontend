@@ -35,7 +35,14 @@ import admissionReducer from "./slices/studentAdmission";
 import employeeReducer from  "./slices/Employeeslice"
 import idCardReducer from "./slices/idCardSlice";
 import hostelBusPassReducer from "./slices/hostelBusPassSlice";
-
+import ledgerwiseStatusReducer from "./slices/ledgerwiseStatusSlice";
+import allDebitRecordReducer from "./slices/Alldebitrecordslice";
+import assignRightsReducer from "./slices/assignRightsSlice";
+import userManagementReducer from "./slices/userManagementSlice";
+import changePasswordReducer from "./slices/changePasswordSlice";
+import hostelChargesReducer from "./slices/Hostelchargesslice";
+import masterHeadsReducer from "./slices/masterHeadsSlice";
+import reservedReceiptsReducer from "./slices/reservedReceiptsSlice"
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -74,7 +81,14 @@ export const store = configureStore({
     employee:employeeReducer,
     idCard: idCardReducer,
     hostelBusPass: hostelBusPassReducer,
-
+ledgerwiseStatus: ledgerwiseStatusReducer,
+    allDebitRecord: allDebitRecordReducer,
+    assignRights: assignRightsReducer,
+    userManagement: userManagementReducer,
+changePassword: changePasswordReducer,
+hostelCharges: hostelChargesReducer,
+ masterHeads: masterHeadsReducer,
+ reservedReceipts: reservedReceiptsReducer
   },
 });
 
