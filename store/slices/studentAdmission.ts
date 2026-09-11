@@ -325,17 +325,33 @@ export const saveDocumentStatus = createAsyncThunk(
   }
 );
 
+// export const deleteDocumentStatus = createAsyncThunk(
+//   "admission/deleteDocumentStatus",
+//   async (idNo: string, { rejectWithValue }) => {
+//     try {
+//       const response = await reduxApiClient.delete("student-registration/academic/document-status", { idNo });
+//       return unwrap(response);
+//     } catch (err: any) {
+//       return rejectWithValue(err.message || "Something went wrong");
+//     }
+//   }
+// );
+
+
 export const deleteDocumentStatus = createAsyncThunk(
   "admission/deleteDocumentStatus",
   async (idNo: string, { rejectWithValue }) => {
     try {
-      const response = await reduxApiClient.delete("student-registration/academic/document-status", { idNo });
+      const response = await reduxApiClient.delete(
+        `student-registration/academic/document-status?idNo=${encodeURIComponent(idNo)}`
+      );
       return unwrap(response);
     } catch (err: any) {
       return rejectWithValue(err.message || "Something went wrong");
     }
   }
 );
+
 
 export const getPreviousCourses = makeListThunk("getPreviousCourses", "academic/masters/previous-courses");
 export const getPreviousBoards = makeListThunk("getPreviousBoards", "academic/masters/previous-boards");

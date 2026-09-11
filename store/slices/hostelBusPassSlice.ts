@@ -42,7 +42,7 @@
 
 // export const fetchColleges = createAsyncThunk("hostelBusPass/fetchColleges", async (_, { rejectWithValue }) => {
 //     const response = await reduxApiClient.get("hostel-bus-pass/colleges");
-//     if (!response.success) return rejectWithValue(response.error?.message || response.message || "Failed to load colleges");
+//     if (!response.success) return rejectWithValue(response.error?.message  || "Failed to load colleges");
 //     return response.data;
 // });
 
@@ -50,7 +50,7 @@
 //     "hostelBusPass/fetchCourses",
 //     async (collegeName, { rejectWithValue }) => {
 //         const response = await reduxApiClient.get("hostel-bus-pass/courses", { collegeName });
-//         if (!response.success) return rejectWithValue(response.error?.message || response.message || "Failed to load courses");
+//         if (!response.success) return rejectWithValue(response.error?.message || response?.message || "Failed to load courses");
 //         return response.data;
 //     }
 // );
@@ -59,7 +59,7 @@
 //     "hostelBusPass/fetchBatches",
 //     async ({ collegeName, course }, { rejectWithValue }) => {
 //         const response = await reduxApiClient.get("hostel-bus-pass/batches", { collegeName, course });
-//         if (!response.success) return rejectWithValue(response.error?.message || response.message || "Failed to load batches");
+//         if (!response.success) return rejectWithValue(response.error?.message || response?.message || "Failed to load batches");
 //         return response.data;
 //     }
 // );
@@ -68,7 +68,7 @@
 //     "hostelBusPass/fetchSemesters",
 //     async ({ collegeName, course, batch }, { rejectWithValue }) => {
 //         const response = await reduxApiClient.get("hostel-bus-pass/semesters", { collegeName, course, batch });
-//         if (!response.success) return rejectWithValue(response.error?.message || response.message || "Failed to load semesters");
+//         if (!response.success) return rejectWithValue(response.error?.message || response?.message || "Failed to load semesters");
 //         return response.data;
 //     }
 // );
@@ -78,7 +78,7 @@
 //     async ({ slot, type, idNo }, { rejectWithValue }) => {
 //         const response = await reduxApiClient.get("hostel-bus-pass/student", { type, idNo });
 //         if (!response.success) {
-//             return rejectWithValue(response.error?.message || response.message || "Failed to load record");
+//             return rejectWithValue(response.error?.message || response?.message || "Failed to load record");
 //         }
 //         return response.data.data; // <-- was response.data
 //     }
@@ -92,7 +92,7 @@
 //             if (response.data?.requiresConfirmation) {
 //                 return rejectWithValue({ message: response.error?.message || response.message, requiresConfirmation: true, srNo: response.data.srNo });
 //             }
-//             return rejectWithValue({ message: response.error?.message || response.message || "Failed to save" });
+//             return rejectWithValue({ message: response.error?.message || response?.message || "Failed to save" });
 //         }
 //         return response;
 //     }
@@ -106,7 +106,7 @@
 //             if (response.data?.requiresConfirmation) {
 //                 return rejectWithValue({ message: response.error?.message || response.message, requiresConfirmation: true });
 //             }
-//             return rejectWithValue({ message: response.error?.message || response.message || "Failed to issue card" });
+//             return rejectWithValue({ message: response.error?.message || response?.message || "Failed to issue card" });
 //         }
 //         return response;
 //     }
@@ -369,71 +369,132 @@ interface IssueCardRejection { message: string; requiresConfirmation?: boolean }
 
 export const fetchColleges = createAsyncThunk<string[]>("hostelBusPass/fetchColleges", async (_, { rejectWithValue }) => {
     const response = await reduxApiClient.get("hostel-bus-pass/colleges");
-    if (!response.success) return rejectWithValue(response.error?.message || response.message || "Failed to load colleges");
+    if (!response.success) return rejectWithValue(response.error?.message  || "Failed to load colleges");
     return response.data;
 });
 
 export const fetchCourses = createAsyncThunk<string[], string>("hostelBusPass/fetchCourses", async (collegeName, { rejectWithValue }) => {
     const response = await reduxApiClient.get("hostel-bus-pass/courses", { collegeName });
-    if (!response.success) return rejectWithValue(response.error?.message || response.message || "Failed to load courses");
+    if (!response.success) return rejectWithValue(response.error?.message  || "Failed to load courses");
     return response.data;
 });
 
 export const fetchBatches = createAsyncThunk<string[], FetchBatchesArg>("hostelBusPass/fetchBatches", async ({ collegeName, course }, { rejectWithValue }) => {
     const response = await reduxApiClient.get("hostel-bus-pass/batches", { collegeName, course });
-    if (!response.success) return rejectWithValue(response.error?.message || response.message || "Failed to load batches");
+    if (!response.success) return rejectWithValue(response.error?.message  || "Failed to load batches");
     return response.data;
 });
 
-export const fetchSemesters = createAsyncThunk<SemesterOption[], FetchSemestersArg>("hostelBusPass/fetchSemesters", async ({ collegeName, course, batch }, { rejectWithValue }) => {
-    const response = await reduxApiClient.get("hostel-bus-pass/semesters", { collegeName, course, batch });
-    if (!response.success) return rejectWithValue(response.error?.message || response.message || "Failed to load semesters");
+export const fetchSemesters = createAsyncThunk<SemesterOption[], FetchSemestersArg>(
+  "hostelBusPass/fetchSemesters",
+  async ({ collegeName, course, batch }, { rejectWithValue }) => {
+    const response = await reduxApiClient.get("hostel-bus-pass/semesters", {
+      collegeName,
+      course,
+      batch: String(batch),
+    });
+    if (!response.success) return rejectWithValue(response.error?.message || "Failed to load semesters");
     return response.data;
-});
+  }
+);
 
 export const displayStudent = createAsyncThunk<DisplayStudentPayload, DisplayStudentArg>("hostelBusPass/displayStudent", async ({ type, idNo }, { rejectWithValue }) => {
     const response = await reduxApiClient.get("hostel-bus-pass/student", { type, idNo });
     if (!response.success) {
-        return rejectWithValue(response.error?.message || response.message || "Failed to load record");
+        return rejectWithValue(response.error?.message  || "Failed to load record");
     }
     return response.data.data as DisplayStudentPayload;
 });
 
-export const saveStudentImage = createAsyncThunk<SaveStudentImagePayload, SaveStudentImageArg, { rejectValue: SaveStudentImageRejection }>("hostelBusPass/saveStudentImage", async ({ type, idNo, blob }, { rejectWithValue }) => {
+// export const saveStudentImage = createAsyncThunk<SaveStudentImagePayload, SaveStudentImageArg, { rejectValue: SaveStudentImageRejection }>("hostelBusPass/saveStudentImage", async ({ type, idNo, blob }, { rejectWithValue }) => {
+//     const formData = new FormData();
+//     formData.append("type", type);
+//     formData.append("idNo", idNo);
+//     formData.append("image", blob, "snap.jpg");
+//     const response = await reduxApiClient.post("hostel-bus-pass/save-image", formData);
+//     if (!response.success) {
+//         return rejectWithValue({ message: response.error?.message  || "Failed to save photo" });
+//     }
+//     return response;
+// });
+export const saveStudentImage = createAsyncThunk<SaveStudentImagePayload, SaveStudentImageArg, { rejectValue: SaveStudentImageRejection }>(
+  "hostelBusPass/saveStudentImage",
+  async ({ type, idNo, blob }, { rejectWithValue }) => {
     const formData = new FormData();
     formData.append("type", type);
     formData.append("idNo", idNo);
     formData.append("image", blob, "snap.jpg");
     const response = await reduxApiClient.post("hostel-bus-pass/save-image", formData);
     if (!response.success) {
-        return rejectWithValue({ message: response.error?.message || response.message || "Failed to save photo" });
+      return rejectWithValue({ message: response.error?.message || "Failed to save photo" });
     }
-    return response;
-});
+    return response.data as SaveStudentImagePayload;
+  }
+);
+// export const savePass = createAsyncThunk<SavePassPayload, SavePassArg, { rejectValue: SavePassRejection }>("hostelBusPass/savePass", async ({ slot, ...payload }, { rejectWithValue }) => {
+//     const response = await reduxApiClient.post("hostel-bus-pass/save", payload);
+//     if (!response.success) {
+//         if (response.data?.requiresConfirmation) {
+//             return rejectWithValue({ message: response.error?.message || response.message, requiresConfirmation: true, srNo: response.data.srNo });
+//         }
+//         return rejectWithValue({ message: response.error?.message  || "Failed to save" });
+//     }
+//     return response;
+// });
 
-export const savePass = createAsyncThunk<SavePassPayload, SavePassArg, { rejectValue: SavePassRejection }>("hostelBusPass/savePass", async ({ slot, ...payload }, { rejectWithValue }) => {
+
+
+export const savePass = createAsyncThunk<SavePassPayload, SavePassArg, { rejectValue: SavePassRejection }>(
+  "hostelBusPass/savePass",
+  async ({ slot, ...payload }, { rejectWithValue }) => {
     const response = await reduxApiClient.post("hostel-bus-pass/save", payload);
     if (!response.success) {
-        if (response.data?.requiresConfirmation) {
-            return rejectWithValue({ message: response.error?.message || response.message, requiresConfirmation: true, srNo: response.data.srNo });
-        }
-        return rejectWithValue({ message: response.error?.message || response.message || "Failed to save" });
+      if (response.data?.requiresConfirmation) {
+        return rejectWithValue({
+          message: response.error?.message || "Failed to save",
+          requiresConfirmation: true,
+          srNo: response.data.srNo,
+        });
+      }
+      return rejectWithValue({ message: response.error?.message || "Failed to save" });
     }
-    return response;
-});
+    return response.data as SavePassPayload;
+  }
+);
 
-export const issueCard = createAsyncThunk<IssueCardPayload, IssueCardArg, { rejectValue: IssueCardRejection }>("hostelBusPass/issueCard", async ({ slot, ...payload }, { rejectWithValue }) => {
-    const response = await reduxApiClient.post("hostel-bus-pass/issue-card", payload);
-    if (!response.success) {
-        if (response.data?.requiresConfirmation) {
-            return rejectWithValue({ message: response.error?.message || response.message, requiresConfirmation: true });
-        }
-        return rejectWithValue({ message: response.error?.message || response.message || "Failed to issue card" });
-    }
-    return response;
-});
+
+// export const issueCard = createAsyncThunk<IssueCardPayload, IssueCardArg, { rejectValue: IssueCardRejection }>("hostelBusPass/issueCard", async ({ slot, ...payload }, { rejectWithValue }) => {
+//     const response = await reduxApiClient.post("hostel-bus-pass/issue-card", payload);
+//     if (!response.success) {
+//         if (response.data?.requiresConfirmation) {
+//             return rejectWithValue({ message: response.error?.message || response.message, requiresConfirmation: true });
+//         }
+//         return rejectWithValue({ message: response.error?.message  || "Failed to issue card" });
+//     }
+//     return response;
+// });
 
 // ---------------- Slice ----------------
+
+
+
+export const issueCard = createAsyncThunk<IssueCardPayload, IssueCardArg, { rejectValue: IssueCardRejection }>(
+  "hostelBusPass/issueCard",
+  async ({ slot, ...payload }, { rejectWithValue }) => {
+    const response = await reduxApiClient.post("hostel-bus-pass/issue-card", payload);
+    if (!response.success) {
+      if (response.data?.requiresConfirmation) {
+        return rejectWithValue({
+          message: response.error?.message || "Failed to issue card",
+          requiresConfirmation: true,
+        });
+      }
+      return rejectWithValue({ message: response.error?.message || "Failed to issue card" });
+    }
+    return response.data as IssueCardPayload;
+  }
+);
+
 
 const hostelBusPassSlice = createSlice({
     name: "hostelBusPass",

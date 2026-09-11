@@ -381,14 +381,31 @@ export const updateHostelCharge = createAsyncThunk(
 );
 
 // row delete (mirrors DataGridView1_UserDeletingRow)
+// export const deleteHostelCharge = createAsyncThunk(
+//   "hostelCharges/deleteHostelCharge",
+//   async (key: HostelChargeKey, { rejectWithValue }) => {
+//     const res = await reduxApiClient.delete("hostel-charges", { data: key });
+//     if (!res.success) return rejectWithValue(res.error?.message || "Delete failed");
+//     return { key, ...res.data };
+//   }
+// );
+
+
 export const deleteHostelCharge = createAsyncThunk(
   "hostelCharges/deleteHostelCharge",
   async (key: HostelChargeKey, { rejectWithValue }) => {
-    const res = await reduxApiClient.delete("hostel-charges", { data: key });
+    const query = new URLSearchParams({
+      collegeName: key.collegeName,
+      batch: key.batch,
+      hostelName: key.hostelName,
+      roomType: key.roomType ?? "",
+    });
+    const res = await reduxApiClient.delete(`hostel-charges?${query.toString()}`);
     if (!res.success) return rejectWithValue(res.error?.message || "Delete failed");
     return { key, ...res.data };
   }
 );
+
 
 const hostelChargesSlice = createSlice({
   name: "hostelCharges",

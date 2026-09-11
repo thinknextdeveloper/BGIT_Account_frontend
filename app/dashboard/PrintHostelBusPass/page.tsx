@@ -524,37 +524,37 @@ console.log("--------",colleges,courses,batches)
         </label>
 
         <label style={labelStyle}>College Name</label>
-        <select value={college} onChange={(e) => setCollege(e.target.value)} style={inputStyle}>
-          <option value="" />
-          {Array.isArray(colleges?.data) &&
-  colleges?.data.map((c: string, index: number) => (
-    <option key={index} value={c}>
-      {c}
-    </option>
-  ))}
-        </select>
+     <select value={college} onChange={(e) => setCollege(e.target.value)} style={inputStyle}>
+  <option value="" />
+  {Array.isArray(colleges) &&
+    colleges.map((c: string, index: number) => (
+      <option key={index} value={c}>
+        {c}
+      </option>
+    ))}
+</select>
 
         <label style={labelStyle}>Course</label>
-        <select value={course} onChange={(e) => setCourse(e.target.value)} style={inputStyle}>
-          <option value="" />
-       {Array.isArray(courses?.data) &&
-  courses.data.map((c: string, index: number) => (
-    <option key={index} value={c}>
-      {c}
-    </option>
-  ))}
-        </select>
+<select value={course} onChange={(e) => setCourse(e.target.value)} style={inputStyle}>
+  <option value="" />
+  {Array.isArray(courses) &&
+    courses.map((c: string, index: number) => (
+      <option key={index} value={c}>
+        {c}
+      </option>
+    ))}
+</select>
 
-        <label style={labelStyle}>Batch</label>
-        <select value={batch} onChange={(e) => setBatch(e.target.value)} style={inputStyle}>
-          <option value="" />
-         {Array.isArray(batches?.data) &&
-  batches.data.map((b: string, index: number) => (
-    <option key={index} value={b}>
-      {b}
-    </option>
-  ))}
-        </select>
+<label style={labelStyle}>Batch</label>
+<select value={batch} onChange={(e) => setBatch(e.target.value)} style={inputStyle}>
+  <option value="" />
+  {Array.isArray(batches) &&
+    batches.map((b: string, index: number) => (
+      <option key={index} value={b}>
+        {b}
+      </option>
+    ))}
+</select>
       </div>
 
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>

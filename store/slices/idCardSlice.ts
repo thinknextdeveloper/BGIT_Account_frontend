@@ -4,6 +4,13 @@ import { reduxApiClient } from "@/services/reduxservices";
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */
+function toQuery<T extends object>(params: T): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null) out[key] = String(value);
+  }
+  return out;
+}
 
 export type LookupType = "IDNo" | "Registration";
 export type Facility = "Bus" | "Hostel" | "None";
@@ -121,11 +128,27 @@ const initialState: IdCardState = {
 /*  Thunks                                                              */
 /* ------------------------------------------------------------------ */
 
+// export const displayIdCard = createAsyncThunk(
+//   "idCard/display",
+//   async (params: DisplayArgs, { rejectWithValue }) => {
+//     try {
+//       const response = await reduxApiClient.get(`idcard/display`, params);
+//       if (!response.success) {
+//         return rejectWithValue(response.error?.message || "Failed to load record");
+//       }
+//       return response.data ?? response;
+//     } catch (err: any) {
+//       return rejectWithValue(err.message || "Something went wrong");
+//     }
+//   }
+// );
+
+
 export const displayIdCard = createAsyncThunk(
   "idCard/display",
   async (params: DisplayArgs, { rejectWithValue }) => {
     try {
-      const response = await reduxApiClient.get(`idcard/display`, params);
+      const response = await reduxApiClient.get(`idcard/display`, toQuery(params));
       if (!response.success) {
         return rejectWithValue(response.error?.message || "Failed to load record");
       }
@@ -140,7 +163,7 @@ export const getValidUpTo = createAsyncThunk(
   "idCard/getValidUpTo",
   async (params: ValidUpToArgs, { rejectWithValue }) => {
     try {
-      const response = await reduxApiClient.get(`idcard/valid-upto`, params);
+      const response = await reduxApiClient.get(`idcard/valid-upto`, toQuery(params));
       if (!response.success) {
         return rejectWithValue(response.error?.message || "Failed to load validity");
       }
@@ -150,16 +173,16 @@ export const getValidUpTo = createAsyncThunk(
     }
   }
 );
-
 export const updateCardIssued = createAsyncThunk(
   "idCard/updateCard",
   async (params: UpdateCardArgs, { rejectWithValue }) => {
     try {
       const response = await reduxApiClient.post(`idcard/update-card`, params);
       if (!response.success) {
+        const error = response.error as { message?: string; code?: string } | undefined;
         return rejectWithValue({
-          message: response.error?.message || "Failed to update card",
-          code: response.error?.code,
+          message: error?.message || "Failed to update card",
+          code: error?.code,
         });
       }
       return response.data ?? response;
@@ -168,6 +191,23 @@ export const updateCardIssued = createAsyncThunk(
     }
   }
 );
+// export const updateCardIssued = createAsyncThunk(
+//   "idCard/updateCard",
+//   async (params: UpdateCardArgs, { rejectWithValue }) => {
+//     try {
+//       const response = await reduxApiClient.post(`idcard/update-card`, params);
+//       if (!response.success) {
+//         return rejectWithValue({
+//           message: response.error?.message || "Failed to update card",
+//           code: response.error?.code,
+//         });
+//       }
+//       return response.data ?? response;
+//     } catch (err: any) {
+//       return rejectWithValue({ message: err.message || "Something went wrong" });
+//     }
+//   }
+// );
 
 export const saveIdCardImage = createAsyncThunk(
   "idCard/saveImage",
@@ -193,7 +233,7 @@ export const getPrintPayload = createAsyncThunk(
   "idCard/print",
   async (params: PrintArgs, { rejectWithValue }) => {
     try {
-      const response = await reduxApiClient.get(`idcard/print`, params);
+      const response = await reduxApiClient.get(`idcard/print`, toQuery(params));
       if (!response.success) {
         return rejectWithValue(response.error?.message || "Failed to load print data");
       }

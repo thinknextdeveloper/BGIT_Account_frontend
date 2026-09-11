@@ -112,12 +112,16 @@ export const updateMasterHead = createAsyncThunk(
 export const deleteMasterHead = createAsyncThunk(
   "masterHeads/deleteMasterHead",
   async (key: MasterHeadKey, { rejectWithValue }) => {
-    const res = await reduxApiClient.delete("master-heads", { data: key });
+    const query = new URLSearchParams({
+      collegeName: key.collegeName,
+      head: key.head,
+      srNo: String(key.srNo),
+    });
+    const res = await reduxApiClient.delete(`master-heads?${query.toString()}`);
     if (!res.success) return rejectWithValue(res.error?.message || "Delete failed");
     return { key, ...res.data };
   }
 );
-
 const masterHeadsSlice = createSlice({
   name: "masterHeads",
   initialState,
