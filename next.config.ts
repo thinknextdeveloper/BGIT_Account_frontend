@@ -9,8 +9,3 @@ const nextConfig: NextConfig = {
 
 export default nextConfig;
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-export default nextConfig;
